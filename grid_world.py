@@ -2,6 +2,9 @@
 # grid contains the layout of the board, start is where the agent starts, 
 # and goal is where the agent is supposed to end up.
 
+# Initial single-agent implementation of Grid World.
+# The implementation will later be extended to support multiple agents.
+
 class GridWorld:
     def __init__(self, grid, start, goal):
         self.grid = grid
