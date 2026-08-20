@@ -1,9 +1,10 @@
 from grid_world import GridWorld
-from boards import simple_board, start, goal
-from search import bfs #imports BFS
+from boards import test_board, test_goal, test_start
+from search import bfs, dfs #imports BFS and DFS
+
 
 # Create the Grid World
-world = GridWorld(simple_board, start, goal)
+world = GridWorld(test_board, test_start, test_goal)
 
 # Print basic information
 print("Start:", world.start)
@@ -29,3 +30,18 @@ if path:
 else:
     print("No solution found.")
 
+
+# Run DFS
+dfs_path, dfs_expanded, dfs_frontier, dfs_time = dfs(world)
+
+print("\nDFS")
+print("DFS solution:", dfs_path)
+print("Expanded nodes:", dfs_expanded)
+print("Frontier nodes:", dfs_frontier)
+print("Processing time:", dfs_time, "seconds")
+
+if dfs_path:
+    dfs_cost = len(dfs_path) - 1
+    print("DFS cost:", dfs_cost)
+else:
+    print("No solution found.")

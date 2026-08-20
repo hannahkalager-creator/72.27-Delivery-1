@@ -75,3 +75,39 @@ def bfs(world):
 
     # No solution was found
     return None, expanded_nodes, len(queue), processing_time
+
+def dfs(world):
+    start_time = time.perf_counter()
+
+    visited = []
+    stack = []
+    came_from = {}
+    expanded_nodes = 0
+
+    stack.append(world.start)
+    visited.append(world.start)
+
+    while stack:
+        current_state= stack.pop()
+        expanded_nodes += 1
+
+        if current_state == world.goal:
+            path = reconstruct_path(came_from, world.start, world.goal)
+            frontier_nodes = len(stack)
+
+            end_time = time.perf_counter()
+            processing_time = end_time-start_time
+
+            return path, expanded_nodes, frontier_nodes, processing_time
+
+        for neighbor in world.get_neighbors(current_state):
+            if neighbor not in visited:
+                visited.append(neighbor)
+                stack.append(neighbor)
+                came_from[neighbor] = current_state
+
+    end_time = time.perf_counter()
+    processing_time = end_time-start_time
+
+    return None, expanded_nodes, len(stack), processing_time
+    
