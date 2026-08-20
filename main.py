@@ -1,6 +1,7 @@
 from grid_world import GridWorld
 from boards import test_board, test_goal, test_start
-from search import bfs, dfs #imports BFS and DFS
+from search import bfs, dfs, greedy #imports the search algorithms
+from heuristics import manhattan_distance
 
 
 # Create the Grid World
@@ -43,5 +44,22 @@ print("Processing time:", dfs_time, "seconds")
 if dfs_path:
     dfs_cost = len(dfs_path) - 1
     print("DFS cost:", dfs_cost)
+else:
+    print("No solution found.")
+
+# Run Greedy Search using Manhattan distance
+greedy_path, greedy_expanded, greedy_frontier, greedy_time = greedy(
+    world, manhattan_distance
+)
+
+print("\nGreedy")
+print("Greedy solution:", greedy_path)
+print("Expanded nodes:", greedy_expanded)
+print("Frontier nodes:", greedy_frontier)
+print("Processing time:", greedy_time, "seconds")
+
+if greedy_path:
+    greedy_cost = len(greedy_path) - 1
+    print("Greedy cost:", greedy_cost)
 else:
     print("No solution found.")

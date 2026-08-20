@@ -110,4 +110,48 @@ def dfs(world):
     processing_time = end_time-start_time
 
     return None, expanded_nodes, len(stack), processing_time
-    
+
+def greedy(world, heuristic):
+    start_time = time.perf_counter()
+
+    visited = []
+    frontier = []
+    came_from = {}
+    expanded_nodes = 0
+
+    frontier.append(world.start)
+    visited.append(world.start)
+
+    while frontier:
+    # Selects the state with the lowest heuristic value.
+    # lambda calculates h(n) for 
+    # each state so min() can choose the state closest to the goal.
+        current_state = min(
+            frontier, 
+            key = lambda state: heuristic(state, world.goal)
+        )
+
+        frontier.remove(current_state)
+        expanded_nodes += 1
+
+        if current_state == world.goal:
+            path = reconstruct_path(came_from, world.start, world.goal)
+            frontier_nodes = len(frontier)
+
+            end_time = time.perf_counter()
+            processing_time = end_time - start_time
+
+            return path, expanded_nodes, frontier_nodes, processing_time
+
+        for neighbor in world.get_neighbors(current_state):
+            if neighbor not in visited:
+                visited.append(neighbor)
+                frontier.append(neighbor)
+                came_from[neighbor] = current_state
+
+    end_time = time.perf_counter()
+    processing_time = end_time- start_time
+
+    return None, expanded_nodes, len(frontier), processing_time
+
+
