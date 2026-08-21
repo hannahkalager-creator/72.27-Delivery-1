@@ -1,5 +1,7 @@
 
 import time
+import heapq
+
 # This function reconstructs the solution path from start to goal
 # by tracking where each state came from.
 def reconstruct_path(came_from, start, goal):
@@ -154,4 +156,38 @@ def greedy(world, heuristic):
 
     return None, expanded_nodes, len(frontier), processing_time
 
+def astar(world, heuristic):
+    start_time = time.perf_counter()
+
+    explored = set()          # Exp: states already expanded
+    came_from = {}            # search tree: tracks where each state came from
+    expanded_nodes = 0
+
+    g_cost = {world.start: 0}                          # g(n): actual cost from start
+    frontier = [(heuristic(world.start, world.goal), world.start)]  # Fr: ordered by f(n); f(n) = g(n) + h(n)
+
+    while frontier:
+        f, current_state = heapq.heappop(frontier)
+
+        if current_state in explored:
+            continue
+        explored.add(current_state)
+        expanded_nodes += 1
+
+        if current_state == world.goal:
+            path = reconstruct_path(came_from, world.start, world.goal)
+            end_time = time.perf_counter()
+            return path, expanded_nodes, len(frontier), end_time - start_time
+
+        for neighbor in world.get_neighbors(current_state):
+            if neighbor not in explored:
+                g_new = g_cost[current_state] + 1      # cost of each move is 1
+                if neighbor not in g_cost or g_new < g_cost[neighbor]:
+                    g_cost[neighbor] = g_new
+                    f_new = g_new + heuristic(neighbor, world.goal)
+                    heapq.heappush(frontier, (f_new, neighbor))
+                    came_from[neighbor] = current_state
+
+    end_time = time.perf_counter()
+    return None, expanded_nodes, len(frontier), end_time - start_time
 
