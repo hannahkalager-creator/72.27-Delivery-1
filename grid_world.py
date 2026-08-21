@@ -68,15 +68,17 @@ class GridWorld:
 
 
 class MultiAgentGridWorld(GridWorld):
-    def __init__(self, grid, start, goal):
-        super().__init__(grid, start, goal) #inherits from GridWorld
+    def __init__(self, grid, start, goal): 
+        positions, current_agent = start
 
+        super().__init__(grid, start, goal) #inherits from gridWorld
+ 
         # Each agent must have one goal
-        if len(start) != len(goal):
+        if len(positions) != len(goal):
             raise ValueError("Each agent must have one goal.")
 
         # Two agents cannot start in the same position
-        if len(set(start)) != len(start):
+        if len(set(positions)) != len(positions):
             raise ValueError("Two agents cannot start in the same position.")
 
         # Count how many free cells there are in the grid
@@ -86,11 +88,11 @@ class MultiAgentGridWorld(GridWorld):
             for cell in row
         )
 
-        if len(start) > free_cells:
+        if len(positions) > free_cells:
             raise ValueError("There are more agents than free cells.")
 
         # Check that all start positions are valid
-        for position in start:
+        for position in positions:
             row, col = position
 
             if not self.is_valid_position(row, col):
@@ -120,23 +122,35 @@ class MultiAgentGridWorld(GridWorld):
 
         row, col = positions[current_agent]
 
-        for row_change, col_change in self.directions:
-            new_row = row + row_change
-            new_col = col + col_change
-            new_position = (new_row, new_col)
+        # If the current agent has already reached its goal,
+        # it can stay in place and pass the turn to the next agent.
+        if positions[current_agent] == self.goal[current_agent]:
+            next_agent = (current_agent + 1) % len(positions)
 
-            if self.is_valid_position(new_row, new_col):
-                if new_position not in positions:
-                    new_positions = list(positions)
-                    new_positions[current_agent] = new_position
+            wait_state = (
+                positions,
+                next_agent
+            )
 
-                    next_agent = (current_agent + 1) % len(positions)
+            neighbors.append(wait_state)
+        else:
+            for row_change, col_change in self.directions:
+                new_row = row + row_change
+                new_col = col + col_change
+                new_position = (new_row, new_col)
 
-                    new_state = (
-                        tuple(new_positions),
-                        next_agent
-                    )
+                if self.is_valid_position(new_row, new_col):
+                    if new_position not in positions:
+                        new_positions = list(positions)
+                        new_positions[current_agent] = new_position
 
-                    neighbors.append(new_state)
+                        next_agent = (current_agent + 1) % len(positions)
+
+                        new_state = (
+                            tuple(new_positions),
+                            next_agent
+                        )
+
+                        neighbors.append(new_state)
 
         return neighbors

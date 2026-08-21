@@ -50,8 +50,8 @@ def bfs(world):
 
 
         # Return the solution path if the goal is reached
-        if current_state == world.goal:
-            path= reconstruct_path(came_from, world.start, world.goal)
+        if world.is_goal(current_state):
+            path= reconstruct_path(came_from, world.start, current_state)
             # Number of nodes still waiting in the frontier when the search ends
             frontier_nodes = len(queue)
 
