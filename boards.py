@@ -25,3 +25,26 @@ test_board = [
 
 test_start = (0, 0)
 test_goal = (5, 5)
+
+
+# Multi-agent Grid World with two agents and two goals.
+multi_board = [
+    [0, 0, 0, 0, 0],
+    [0, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 0],
+    [0, 0, 0, 0, 0]
+]
+
+multi_start = (
+    (
+        (0, 0),  # Agent 0
+        (4, 0)   # Agent 1
+    ),
+    0            # Agent 0 starts
+)
+
+multi_goal = (
+    (4, 4),
+    (0, 4)
+)
