@@ -1,6 +1,6 @@
 from grid_world import GridWorld
 from boards import test_board, test_goal, test_start
-from search import bfs, dfs, greedy #imports the search algorithms
+from search import bfs, dfs, greedy, astar #imports the search algorithms
 from heuristics import manhattan_distance
 
 
@@ -61,5 +61,19 @@ print("Processing time:", greedy_time, "seconds")
 if greedy_path:
     greedy_cost = len(greedy_path) - 1
     print("Greedy cost:", greedy_cost)
+else:
+    print("No solution found.")
+
+# Run A*
+astar_path, astar_expanded, astar_frontier, astar_time = astar(world, manhattan_distance)
+
+print("\nA*")
+print("A* solution:", astar_path)
+print("Expanded nodes:", astar_expanded)
+print("Frontier nodes:", astar_frontier)
+print("Processing time:", astar_time, "seconds")
+
+if astar_path:
+    print("A* cost:", len(astar_path) - 1)
 else:
     print("No solution found.")
