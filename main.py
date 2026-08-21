@@ -2,6 +2,8 @@ from grid_world import GridWorld
 from boards import test_board, test_goal, test_start
 from search import bfs, dfs, greedy, astar #imports the search algorithms
 from heuristics import manhattan_distance
+from grid_world import MultiAgentGridWorld
+from boards import multi_board, multi_start, multi_goal
 
 
 # Create the Grid World
@@ -77,3 +79,18 @@ if astar_path:
     print("A* cost:", len(astar_path) - 1)
 else:
     print("No solution found.")
+
+
+multi_world = MultiAgentGridWorld(
+    multi_board,
+    multi_start[0],
+    multi_goal
+)
+
+state = multi_start
+
+print("Multi-agent state:", state)
+print("Possible next states:")
+
+for neighbor in multi_world.get_neighbors(state):
+    print(neighbor)
