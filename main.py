@@ -21,6 +21,7 @@ print("Possible moves from start:", neighbors)
 #run BFS
 
 path, expanded_nodes, frontier_nodes, processing_time = bfs(world)
+
 visualize(world, path)
 
 print("BFS solution:", path)
