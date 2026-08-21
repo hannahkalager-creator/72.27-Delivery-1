@@ -38,7 +38,7 @@ else:
 
 # Run DFS
 dfs_path, dfs_expanded, dfs_frontier, dfs_time = dfs(world)
-
+visualize(world, path)
 print("\nDFS")
 print("DFS solution:", dfs_path)
 print("Expanded nodes:", dfs_expanded)
