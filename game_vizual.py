@@ -1,5 +1,5 @@
 import pygame
-from grid_world import GridWorld
+
 
 def visualize(world, path):
     pygame.init()
