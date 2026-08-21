@@ -1,7 +1,7 @@
 from grid_world import GridWorld
 from boards import test_board, test_goal, test_start
 from search import bfs, dfs, greedy, astar #imports the search algorithms
-from heuristics import manhattan_distance
+from heuristics import manhattan_distance, euclidean_distance, weighted_manhattan #imports the heuristics
 
 
 # Create the Grid World
@@ -64,10 +64,25 @@ if greedy_path:
 else:
     print("No solution found.")
 
-# Run A*
+# Run A* with Manhattan distance
 astar_path, astar_expanded, astar_frontier, astar_time = astar(world, manhattan_distance)
+print("\nA* with Manhattan distance")
+print("A* solution:", astar_path)
+print("Expanded nodes:", astar_expanded)
+print("Frontier nodes:", astar_frontier)
+print("Processing time:", astar_time, "seconds")
 
+# Run A* with Euclidean distance
+astar_path, astar_expanded, astar_frontier, astar_time = astar(world, euclidean_distance)
 print("\nA*")
+print("A* solution:", astar_path)
+print("Expanded nodes:", astar_expanded)
+print("Frontier nodes:", astar_frontier)
+print("Processing time:", astar_time, "seconds")
+
+# Run A* with weighted_manhattan
+astar_path, astar_expanded, astar_frontier, astar_time = astar(world, weighted_manhattan)
+print("\nA* with weighted_manhattan")
 print("A* solution:", astar_path)
 print("Expanded nodes:", astar_expanded)
 print("Frontier nodes:", astar_frontier)
