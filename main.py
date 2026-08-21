@@ -144,6 +144,25 @@ if multi_path:
 
 
 
+# Run DFS on the multi-agent Grid World
+multi_dfs_path, multi_dfs_expanded, multi_dfs_frontier, multi_dfs_time = dfs(multi_world)
 
+print("\nMulti-agent DFS")
+print("Solution:", multi_dfs_path)
+print("Expanded nodes:", multi_dfs_expanded)
+print("Frontier nodes:", multi_dfs_frontier)
+print("Processing time:", multi_dfs_time, "seconds")
 
+if multi_dfs_path:
+    print("Cost:", len(multi_dfs_path) - 1)
+
+    agent_costs = calculate_agent_costs(multi_dfs_path)
+
+    print("Cost per agent:")
+    for agent_index, cost in enumerate(agent_costs):
+        print(f"Agent {agent_index}: {cost}")
+
+    print("Total movement cost:", sum(agent_costs))
+else:
+    print("No solution found.")
 

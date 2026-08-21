@@ -93,8 +93,8 @@ def dfs(world):
         current_state= stack.pop()
         expanded_nodes += 1
 
-        if current_state == world.goal:
-            path = reconstruct_path(came_from, world.start, world.goal)
+        if world.is_goal(current_state):
+            path = reconstruct_path(came_from, world.start, current_state)
             frontier_nodes = len(stack)
 
             end_time = time.perf_counter()
