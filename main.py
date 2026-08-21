@@ -8,7 +8,11 @@ from boards import (
     multi_goal
 )
 from search import bfs, dfs, greedy, astar
-from heuristics import manhattan_distance
+from heuristics import (
+    manhattan_distance,
+    euclidean_distance,
+    weighted_manhattan
+)
 
 
 def calculate_agent_costs(path):
@@ -88,10 +92,12 @@ if greedy_path:
 else:
     print("No solution found.")
 
-# Run A*
-astar_path, astar_expanded, astar_frontier, astar_time = astar(world, manhattan_distance)
+# Run A* with Manhattan distance
+astar_path, astar_expanded, astar_frontier, astar_time = astar(
+    world, manhattan_distance
+)
 
-print("\nA*")
+print("\nA* with Manhattan distance")
 print("A* solution:", astar_path)
 print("Expanded nodes:", astar_expanded)
 print("Frontier nodes:", astar_frontier)
@@ -102,7 +108,37 @@ if astar_path:
 else:
     print("No solution found.")
 
+# Run A* with Euclidean distance
+euclidean_path, euclidean_expanded, euclidean_frontier, euclidean_time = astar(
+    world, euclidean_distance
+)
 
+print("\nA* with Euclidean distance")
+print("A* solution:", euclidean_path)
+print("Expanded nodes:", euclidean_expanded)
+print("Frontier nodes:", euclidean_frontier)
+print("Processing time:", euclidean_time, "seconds")
+
+if euclidean_path:
+    print("A* cost:", len(euclidean_path) - 1)
+else:
+    print("No solution found.")
+
+# Run A* with weighted Manhattan
+weighted_path, weighted_expanded, weighted_frontier, weighted_time = astar(
+    world, weighted_manhattan
+)
+
+print("\nA* with weighted Manhattan")
+print("A* solution:", weighted_path)
+print("Expanded nodes:", weighted_expanded)
+print("Frontier nodes:", weighted_frontier)
+print("Processing time:", weighted_time, "seconds")
+
+if weighted_path:
+    print("A* cost:", len(weighted_path) - 1)
+else:
+    print("No solution found.")
 
 multi_world = MultiAgentGridWorld(
     multi_board,
@@ -129,18 +165,18 @@ print("Frontier nodes:", multi_frontier)
 print("Processing time:", multi_time, "seconds")
 
 if multi_path:
-    print("Cost:", len(multi_path) - 1)
+    print("Turn cost:", len(multi_path) - 1)
 else:
     print("No solution found.")
 
 if multi_path:
-    agent_costs = calculate_agent_costs(multi_path)
+    bfs_agent_costs = calculate_agent_costs(multi_path)
 
-    print("Cost per agent:")
-    for agent_index, cost in enumerate(agent_costs):
+    print("Movement cost per agent:")
+    for agent_index, cost in enumerate(bfs_agent_costs):
         print(f"Agent {agent_index}: {cost}")
 
-    print("Total movement cost:", sum(agent_costs))
+    print("Total movement cost:", sum(bfs_agent_costs))
 
 
 
@@ -154,15 +190,15 @@ print("Frontier nodes:", multi_dfs_frontier)
 print("Processing time:", multi_dfs_time, "seconds")
 
 if multi_dfs_path:
-    print("Cost:", len(multi_dfs_path) - 1)
+    print("Turn cost:", len(multi_dfs_path) - 1)
 
-    agent_costs = calculate_agent_costs(multi_dfs_path)
+    dfs_agent_costs = calculate_agent_costs(multi_dfs_path)
 
-    print("Cost per agent:")
-    for agent_index, cost in enumerate(agent_costs):
+    print("Movement cost per agent:")
+    for agent_index, cost in enumerate(dfs_agent_costs):
         print(f"Agent {agent_index}: {cost}")
 
-    print("Total movement cost:", sum(agent_costs))
+    print("Total movement cost:", sum(dfs_agent_costs))
 else:
     print("No solution found.")
 
