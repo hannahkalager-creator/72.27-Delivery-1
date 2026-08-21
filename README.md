@@ -1,7 +1,7 @@
 
 ## Notes - while doing the TP1
 
-### Git Workflow**
+### Git Workflow
 
 This project follows a structured branching strategy to keep the codebase clean and avoid conflicts.
 
