@@ -1,6 +1,7 @@
 
 import time
 import heapq
+from collections import deque
 
 # This function reconstructs the solution path from start to goal
 # by tracking where each state came from.
@@ -28,10 +29,10 @@ def reconstruct_path(came_from, start, goal):
 def bfs(world):
     start_time = time.perf_counter()
     # States that have already been visited
-    visited = []
+    visited = set()
 
     # States waiting to be explored
-    queue = []
+    queue = deque()
 
     #to remember previous places
     came_from = {}
@@ -41,11 +42,11 @@ def bfs(world):
 
     # Start BFS from the initial position
     queue.append(world.start)
-    visited.append(world.start)
+    visited.add(world.start)
 
     while queue:
         # BFS explores the first state in the queue
-        current_state = queue.pop(0)
+        current_state = queue.popleft()
         expanded_nodes += 1
 
 
@@ -66,7 +67,7 @@ def bfs(world):
         # Explore all valid neighboring states
         for neighbor in world.get_neighbors(current_state):
             if neighbor not in visited:
-                visited.append(neighbor)
+                visited.add(neighbor)
                 queue.append(neighbor)
                 # Remember where this state came from
                 came_from[neighbor] = current_state
@@ -81,13 +82,16 @@ def bfs(world):
 def dfs(world):
     start_time = time.perf_counter()
 
-    visited = []
+    visited = set()
+
+    # A list, not a deque: DFS pops from the end, which is already O(1)
     stack = []
+
     came_from = {}
     expanded_nodes = 0
 
     stack.append(world.start)
-    visited.append(world.start)
+    visited.add(world.start)
 
     while stack:
         current_state= stack.pop()
@@ -104,7 +108,7 @@ def dfs(world):
 
         for neighbor in world.get_neighbors(current_state):
             if neighbor not in visited:
-                visited.append(neighbor)
+                visited.add(neighbor)
                 stack.append(neighbor)
                 came_from[neighbor] = current_state
 
@@ -116,13 +120,13 @@ def dfs(world):
 def greedy(world, heuristic):
     start_time = time.perf_counter()
 
-    visited = []
+    visited = set()
     frontier = []
     came_from = {}
     expanded_nodes = 0
 
     frontier.append(world.start)
-    visited.append(world.start)
+    visited.add(world.start)
 
     while frontier:
     # Selects the state with the lowest heuristic value.
@@ -147,7 +151,7 @@ def greedy(world, heuristic):
 
         for neighbor in world.get_neighbors(current_state):
             if neighbor not in visited:
-                visited.append(neighbor)
+                visited.add(neighbor)
                 frontier.append(neighbor)
                 came_from[neighbor] = current_state
 
