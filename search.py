@@ -140,8 +140,9 @@ def greedy(world, heuristic):
         frontier.remove(current_state)
         expanded_nodes += 1
 
-        if current_state == world.goal:
-            path = reconstruct_path(came_from, world.start, world.goal)
+        if world.is_goal(current_state):
+            # Rebuild from the reached state; only it is a key in came_from
+            path = reconstruct_path(came_from, world.start, current_state)
             frontier_nodes = len(frontier)
 
             end_time = time.perf_counter()
@@ -178,8 +179,9 @@ def astar(world, heuristic):
         explored.add(current_state)
         expanded_nodes += 1
 
-        if current_state == world.goal:
-            path = reconstruct_path(came_from, world.start, world.goal)
+        if world.is_goal(current_state):
+            # Rebuild from the reached state; only it is a key in came_from
+            path = reconstruct_path(came_from, world.start, current_state)
             end_time = time.perf_counter()
             return path, expanded_nodes, len(frontier), end_time - start_time
 
