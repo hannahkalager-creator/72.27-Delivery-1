@@ -183,4 +183,8 @@ for neighbor in multi_world.get_neighbors(multi_world.start):
 
 report_multi_agent("Multi-agent BFS", bfs(multi_world))
 report_multi_agent("Multi-agent DFS", dfs(multi_world))
+report_multi_agent("Multi-agent Greedy (Manhattan)", greedy(multi_world, manhattan_distance))
+report_multi_agent("Multi-agent A* (Manhattan)", astar(multi_world, manhattan_distance))
+report_multi_agent("Multi-agent A* (Euclidean)", astar(multi_world, euclidean_distance))
+report_multi_agent("Multi-agent A* (weighted Manhattan)", astar(multi_world, weighted_manhattan))
 
