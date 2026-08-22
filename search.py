@@ -133,8 +133,8 @@ def greedy(world, heuristic):
     # lambda calculates h(n) for 
     # each state so min() can choose the state closest to the goal.
         current_state = min(
-            frontier, 
-            key = lambda state: heuristic(state, world.goal)
+            frontier,
+            key = lambda state: world.heuristic_cost(state, heuristic)
         )
 
         frontier.remove(current_state)
