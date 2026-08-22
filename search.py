@@ -167,12 +167,14 @@ def astar(world, heuristic):
     explored = set()          # Exp: states already expanded
     came_from = {}            # search tree: tracks where each state came from
     expanded_nodes = 0
+    insertions = 0            # breaks f(n) ties by insertion order
 
     g_cost = {world.start: 0}                          # g(n): actual cost from start
-    frontier = [(heuristic(world.start, world.goal), world.start)]  # Fr: ordered by f(n); f(n) = g(n) + h(n)
+    # Fr: ordered by f(n); f(n) = g(n) + h(n)
+    frontier = [(world.heuristic_cost(world.start, heuristic), insertions, world.start)]
 
     while frontier:
-        f, current_state = heapq.heappop(frontier)
+        f, _, current_state = heapq.heappop(frontier)
 
         if current_state in explored:
             continue
@@ -190,8 +192,9 @@ def astar(world, heuristic):
                 g_new = g_cost[current_state] + 1      # cost of each move is 1
                 if neighbor not in g_cost or g_new < g_cost[neighbor]:
                     g_cost[neighbor] = g_new
-                    f_new = g_new + heuristic(neighbor, world.goal)
-                    heapq.heappush(frontier, (f_new, neighbor))
+                    f_new = g_new + world.heuristic_cost(neighbor, heuristic)
+                    insertions += 1
+                    heapq.heappush(frontier, (f_new, insertions, neighbor))
                     came_from[neighbor] = current_state
 
     end_time = time.perf_counter()
