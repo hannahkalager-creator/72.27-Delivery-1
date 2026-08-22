@@ -47,8 +47,6 @@ print("Possible moves from start:", neighbors)
 #run BFS
 path, expanded_nodes, frontier_nodes, processing_time = bfs(world)
 
-visualize(world, path)
-
 print("BFS solution:", path)
 print("Expanded nodes:", expanded_nodes)
 print("Frontier nodes:", frontier_nodes)
@@ -64,7 +62,7 @@ else:
 
 # Run DFS
 dfs_path, dfs_expanded, dfs_frontier, dfs_time = dfs(world)
-visualize(world, path)
+
 print("\nDFS")
 print("DFS solution:", dfs_path)
 print("Expanded nodes:", dfs_expanded)
