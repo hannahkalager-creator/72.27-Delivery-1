@@ -14,6 +14,8 @@ from heuristics import (
     weighted_manhattan
 )
 
+from game_visual import visualize
+
 
 def calculate_agent_costs(path):
     if not path:
@@ -47,7 +49,7 @@ print("Possible moves from start:", neighbors)
 #run BFS
 path, expanded_nodes, frontier_nodes, processing_time = bfs(world)
 
-visualize(world, path)
+visualize(world, [path])
 
 print("BFS solution:", path)
 print("Expanded nodes:", expanded_nodes)
@@ -64,7 +66,7 @@ else:
 
 # Run DFS
 dfs_path, dfs_expanded, dfs_frontier, dfs_time = dfs(world)
-visualize(world, path)
+visualize(world, [path])
 print("\nDFS")
 print("DFS solution:", dfs_path)
 print("Expanded nodes:", dfs_expanded)
@@ -180,7 +182,14 @@ if multi_path:
 
     print("Total movement cost:", sum(bfs_agent_costs))
 
-
+agent_paths = [
+        [
+            state[0][agent_index]
+            for state in multi_path
+        ]
+        for agent_index in range(len(multi_path[0][0]))
+    ]
+visualize(multi_world, agent_paths)
 
 # Run DFS on the multi-agent Grid World
 multi_dfs_path, multi_dfs_expanded, multi_dfs_frontier, multi_dfs_time = dfs(multi_world)
