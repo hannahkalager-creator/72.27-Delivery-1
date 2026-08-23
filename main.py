@@ -32,6 +32,31 @@ def calculate_agent_costs(path):
 
     return agent_costs
 
+
+def report_multi_agent(label, result):
+    path, expanded_nodes, frontier_nodes, processing_time = result
+
+    print(f"\n{label}")
+    print("Solution:", path)
+    print("Expanded nodes:", expanded_nodes)
+    print("Frontier nodes:", frontier_nodes)
+    print("Processing time:", processing_time, "seconds")
+
+    if not path:
+        print("No solution found.")
+        return
+
+    print("Turn cost:", len(path) - 1)
+
+    agent_costs = calculate_agent_costs(path)
+
+    print("Movement cost per agent:")
+    for agent_index, cost in enumerate(agent_costs):
+        print(f"Agent {agent_index}: {cost}")
+
+    print("Total movement cost:", sum(agent_costs))
+
+
 # Create the Grid World
 world = GridWorld(test_board, test_start, test_goal)
 
@@ -46,8 +71,6 @@ print("Possible moves from start:", neighbors)
 
 #run BFS
 path, expanded_nodes, frontier_nodes, processing_time = bfs(world)
-
-visualize(world, path)
 
 print("BFS solution:", path)
 print("Expanded nodes:", expanded_nodes)
@@ -64,7 +87,7 @@ else:
 
 # Run DFS
 dfs_path, dfs_expanded, dfs_frontier, dfs_time = dfs(world)
-visualize(world, path)
+
 print("\nDFS")
 print("DFS solution:", dfs_path)
 print("Expanded nodes:", dfs_expanded)
@@ -158,49 +181,10 @@ for neighbor in multi_world.get_neighbors(multi_world.start):
     print(neighbor)
 
 
-multi_path, multi_expanded, multi_frontier, multi_time = bfs(multi_world)
-
-print("\nMulti-agent BFS")
-print("Solution:", multi_path)
-print("Expanded nodes:", multi_expanded)
-print("Frontier nodes:", multi_frontier)
-print("Processing time:", multi_time, "seconds")
-
-if multi_path:
-    print("Turn cost:", len(multi_path) - 1)
-else:
-    print("No solution found.")
-
-if multi_path:
-    bfs_agent_costs = calculate_agent_costs(multi_path)
-
-    print("Movement cost per agent:")
-    for agent_index, cost in enumerate(bfs_agent_costs):
-        print(f"Agent {agent_index}: {cost}")
-
-    print("Total movement cost:", sum(bfs_agent_costs))
-
-
-
-# Run DFS on the multi-agent Grid World
-multi_dfs_path, multi_dfs_expanded, multi_dfs_frontier, multi_dfs_time = dfs(multi_world)
-
-print("\nMulti-agent DFS")
-print("Solution:", multi_dfs_path)
-print("Expanded nodes:", multi_dfs_expanded)
-print("Frontier nodes:", multi_dfs_frontier)
-print("Processing time:", multi_dfs_time, "seconds")
-
-if multi_dfs_path:
-    print("Turn cost:", len(multi_dfs_path) - 1)
-
-    dfs_agent_costs = calculate_agent_costs(multi_dfs_path)
-
-    print("Movement cost per agent:")
-    for agent_index, cost in enumerate(dfs_agent_costs):
-        print(f"Agent {agent_index}: {cost}")
-
-    print("Total movement cost:", sum(dfs_agent_costs))
-else:
-    print("No solution found.")
+report_multi_agent("Multi-agent BFS", bfs(multi_world))
+report_multi_agent("Multi-agent DFS", dfs(multi_world))
+report_multi_agent("Multi-agent Greedy (Manhattan)", greedy(multi_world, manhattan_distance))
+report_multi_agent("Multi-agent A* (Manhattan)", astar(multi_world, manhattan_distance))
+report_multi_agent("Multi-agent A* (Euclidean)", astar(multi_world, euclidean_distance))
+report_multi_agent("Multi-agent A* (weighted Manhattan)", astar(multi_world, weighted_manhattan))
 

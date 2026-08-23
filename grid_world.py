@@ -49,7 +49,11 @@ class GridWorld:
     def is_goal(self, state):
         return state == self.goal
 
-    
+    # Applies a two-cell heuristic to this world's state shape
+    def heuristic_cost(self, state, heuristic):
+        return heuristic(state, self.goal)
+
+
     def get_neighbors(self, state):
         #gets the current row and state of the agent
         row, col = state
@@ -114,6 +118,15 @@ class MultiAgentGridWorld(GridWorld):
     def is_goal(self, state):
         positions, current_agent = state
         return positions == self.goal
+
+    # Sums each agent's distance to its own goal. A turn moves one agent one
+    # cell, so the sum drops by at most 1 per turn and never overestimates.
+    def heuristic_cost(self, state, heuristic):
+        positions, current_agent = state
+        return sum(
+            heuristic(position, goal)
+            for position, goal in zip(positions, self.goal)
+        )
 
 
     def get_neighbors(self, state):
