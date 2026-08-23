@@ -1,6 +1,7 @@
 
 import time
 import heapq
+from collections import deque
 
 # This function reconstructs the solution path from start to goal
 # by tracking where each state came from.
@@ -28,10 +29,10 @@ def reconstruct_path(came_from, start, goal):
 def bfs(world):
     start_time = time.perf_counter()
     # States that have already been visited
-    visited = []
+    visited = set()
 
     # States waiting to be explored
-    queue = []
+    queue = deque()
 
     #to remember previous places
     came_from = {}
@@ -41,11 +42,11 @@ def bfs(world):
 
     # Start BFS from the initial position
     queue.append(world.start)
-    visited.append(world.start)
+    visited.add(world.start)
 
     while queue:
         # BFS explores the first state in the queue
-        current_state = queue.pop(0)
+        current_state = queue.popleft()
         expanded_nodes += 1
 
 
@@ -66,7 +67,7 @@ def bfs(world):
         # Explore all valid neighboring states
         for neighbor in world.get_neighbors(current_state):
             if neighbor not in visited:
-                visited.append(neighbor)
+                visited.add(neighbor)
                 queue.append(neighbor)
                 # Remember where this state came from
                 came_from[neighbor] = current_state
@@ -81,13 +82,16 @@ def bfs(world):
 def dfs(world):
     start_time = time.perf_counter()
 
-    visited = []
+    visited = set()
+
+    # A list, not a deque: DFS pops from the end, which is already O(1)
     stack = []
+
     came_from = {}
     expanded_nodes = 0
 
     stack.append(world.start)
-    visited.append(world.start)
+    visited.add(world.start)
 
     while stack:
         current_state= stack.pop()
@@ -104,7 +108,7 @@ def dfs(world):
 
         for neighbor in world.get_neighbors(current_state):
             if neighbor not in visited:
-                visited.append(neighbor)
+                visited.add(neighbor)
                 stack.append(neighbor)
                 came_from[neighbor] = current_state
 
@@ -116,28 +120,29 @@ def dfs(world):
 def greedy(world, heuristic):
     start_time = time.perf_counter()
 
-    visited = []
+    visited = set()
     frontier = []
     came_from = {}
     expanded_nodes = 0
 
     frontier.append(world.start)
-    visited.append(world.start)
+    visited.add(world.start)
 
     while frontier:
     # Selects the state with the lowest heuristic value.
     # lambda calculates h(n) for 
     # each state so min() can choose the state closest to the goal.
         current_state = min(
-            frontier, 
-            key = lambda state: heuristic(state, world.goal)
+            frontier,
+            key = lambda state: world.heuristic_cost(state, heuristic)
         )
 
         frontier.remove(current_state)
         expanded_nodes += 1
 
-        if current_state == world.goal:
-            path = reconstruct_path(came_from, world.start, world.goal)
+        if world.is_goal(current_state):
+            # Rebuild from the reached state; only it is a key in came_from
+            path = reconstruct_path(came_from, world.start, current_state)
             frontier_nodes = len(frontier)
 
             end_time = time.perf_counter()
@@ -147,7 +152,7 @@ def greedy(world, heuristic):
 
         for neighbor in world.get_neighbors(current_state):
             if neighbor not in visited:
-                visited.append(neighbor)
+                visited.add(neighbor)
                 frontier.append(neighbor)
                 came_from[neighbor] = current_state
 
@@ -162,20 +167,23 @@ def astar(world, heuristic):
     explored = set()          # Exp: states already expanded
     came_from = {}            # search tree: tracks where each state came from
     expanded_nodes = 0
+    insertions = 0            # breaks f(n) ties by insertion order
 
     g_cost = {world.start: 0}                          # g(n): actual cost from start
-    frontier = [(heuristic(world.start, world.goal), world.start)]  # Fr: ordered by f(n); f(n) = g(n) + h(n)
+    # Fr: ordered by f(n); f(n) = g(n) + h(n)
+    frontier = [(world.heuristic_cost(world.start, heuristic), insertions, world.start)]
 
     while frontier:
-        f, current_state = heapq.heappop(frontier)
+        f, _, current_state = heapq.heappop(frontier)
 
         if current_state in explored:
             continue
         explored.add(current_state)
         expanded_nodes += 1
 
-        if current_state == world.goal:
-            path = reconstruct_path(came_from, world.start, world.goal)
+        if world.is_goal(current_state):
+            # Rebuild from the reached state; only it is a key in came_from
+            path = reconstruct_path(came_from, world.start, current_state)
             end_time = time.perf_counter()
             return path, expanded_nodes, len(frontier), end_time - start_time
 
@@ -184,8 +192,9 @@ def astar(world, heuristic):
                 g_new = g_cost[current_state] + 1      # cost of each move is 1
                 if neighbor not in g_cost or g_new < g_cost[neighbor]:
                     g_cost[neighbor] = g_new
-                    f_new = g_new + heuristic(neighbor, world.goal)
-                    heapq.heappush(frontier, (f_new, neighbor))
+                    f_new = g_new + world.heuristic_cost(neighbor, heuristic)
+                    insertions += 1
+                    heapq.heappush(frontier, (f_new, insertions, neighbor))
                     came_from[neighbor] = current_state
 
     end_time = time.perf_counter()
