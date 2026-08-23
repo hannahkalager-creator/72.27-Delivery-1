@@ -67,12 +67,12 @@ agent_paths = [
     visualize(multi_world, agent_paths)
 """
 
-def visualize(world, paths):
+def visualize(search_method, world, paths):
     rows = len(world.grid)
     cols = len(world.grid[0])
     
     pygame.init()
-    pygame.display.set_caption("Grid World")
+    pygame.display.set_caption("Grid World - Solved with " + search_method)
     screen = pygame.display.set_mode((cols * CELL_SIZE, rows * CELL_SIZE))
     transparent_layer = pygame.Surface((cols * CELL_SIZE, rows * CELL_SIZE), pygame.SRCALPHA)
     

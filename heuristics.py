@@ -3,9 +3,7 @@ import math
 # Estimates the distance from the current state to the goal
 # using only horizontal and vertical movements.
 def manhattan_distance(state, goal):
-    row_difference = abs(state[0] - goal[0])
-    column_difference = abs(state[1] - goal[1])
-    return row_difference + column_difference
+    return abs(state[0] - goal[0]) + abs(state[1] - goal[1])
 
 # Estimates the straight-line distance from the current state to the goal.
 # Always admissible since the straight-line distance never exceeds the actual path cost.

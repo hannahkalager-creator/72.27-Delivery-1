@@ -1,4 +1,4 @@
-#The GridWorld class represents the game board. 
+# The GridWorld class represents the game board. 
 # grid contains the layout of the board, start is where the agent starts, 
 # and goal is where the agent is supposed to end up.
 
@@ -7,7 +7,7 @@
 
 class GridWorld:
 
-                    #the four possible movements, up, down, left, right
+    #the four possible movements, up, down, left, right
     directions = [
         (-1,0), #up
         (1,0), #down
@@ -19,9 +19,6 @@ class GridWorld:
         self.grid = grid
         self.start = start
         self.goal = goal
-
-
-
 
     def is_valid_position(self, row, col):
         # Checks if a position is valid on the board
