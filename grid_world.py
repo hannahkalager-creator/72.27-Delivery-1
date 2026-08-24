@@ -14,8 +14,7 @@ class GridWorld():
         self.grid = grid
         self.start = start
         self.goal = goal
-        self.current_agent = 0
-        self.initial_state = (start, self.current_agent)
+        self.state = (start, 0)
         
         if len(start) != len(goal):
             raise ValueError("Each agent must have one goal.")
@@ -40,8 +39,7 @@ class GridWorld():
         if len(start) > free_cells:
             raise ValueError("There are more agents than free cells.")
                     
-    # Checks if all agents have reached their assigned goals
-    def is_goal(self, state):
+    def all_agents_at_goal(self, state):
         positions, _ = state
         return positions == self.goal
 

@@ -8,7 +8,6 @@ from heuristics import manhattan_distance, euclidean_distance, weighted_manhatta
 from boards import multi_board, multi_start, multi_goal
 
 
-
 class TestSearch(unittest.TestCase):
 # =============================================================================
 # MULTI-AGENT TESTS
@@ -21,7 +20,7 @@ class TestSearch(unittest.TestCase):
     # Agent 0 goes (0,0)->(4,4) = 8 and agent 1 goes (4,0)->(0,4) = 8.
     def test_multi_heuristic_cost_sums_per_agent(self):
         world = self.multi_world()
-        h = world.heuristic_cost(world.initial_state, manhattan_distance)
+        h = world.heuristic_cost(world.state, manhattan_distance)
         self.assertEqual(h, 16)
 
     # BFS is optimal for turn cost, so A* must match it. This is what shows
@@ -41,7 +40,7 @@ class TestSearch(unittest.TestCase):
         actual_cost = len(bfs_path) - 1
 
         for heuristic in (manhattan_distance, euclidean_distance):
-            h = world.heuristic_cost(world.initial_state, heuristic)
+            h = world.heuristic_cost(world.state, heuristic)
             self.assertLessEqual(h, actual_cost)
 
     # Greedy has to reach the goal, though it is not guaranteed to be optimal
@@ -50,7 +49,7 @@ class TestSearch(unittest.TestCase):
         path, _, _, _ = greedy(world, manhattan_distance)
 
         self.assertIsNotNone(path)
-        self.assertTrue(world.is_goal(path[-1]))
+        self.assertTrue(world.all_agents_at_goal(path[-1]))
 
     # Non-admissible weighted Manhattan should not expand more than Manhattan
     def test_multi_weighted_fewer_expansions(self):
@@ -71,7 +70,7 @@ class TestSearch(unittest.TestCase):
             ((0, 3), (0, 2))
         )
 
-        self.assertEqual(world.get_neighbors(world.initial_state), [])
+        self.assertEqual(world.get_neighbors(world.state), [])
 
         for path, _, _, _ in (
             bfs(world),
