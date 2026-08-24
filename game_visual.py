@@ -1,6 +1,4 @@
 import pygame
-from grid_world import GridWorld
-import time
 
 CELL_SIZE = 80
 
@@ -18,6 +16,8 @@ colors = [
 
 
 def draw_grid(screen, world, rows, cols):
+    """This function draws the grid world on the provided Pygame screen. 
+    It iterates through each cell in the grid and fills it with white if it's empty or black if it's a wall/block."""
     WHITE  = (255, 255, 255)
     BLACK  = (0, 0, 0)
     
@@ -29,6 +29,8 @@ def draw_grid(screen, world, rows, cols):
 
 
 def draw_start_and_goal(screen, paths, agent_colors):
+    """This function draws the start and goal positions for each agent on the provided Pygame screen.
+    It uses the paths of each agent to determine their start and goal positions."""
     for agent_index, path in enumerate(paths):
         start_row, start_col = path[0]
         goal_row, goal_col = path[-1]
@@ -37,6 +39,8 @@ def draw_start_and_goal(screen, paths, agent_colors):
 
 
 def draw_transparent_path(screen, transparent_layer, paths, agent_colors):
+    """This function draws the paths of each agent from their start position to their goal position.
+    It draws these paths on a transparent layer over the grid world."""
     clock = pygame.time.Clock()
     max_steps = max(len(path) for path in paths)
         
@@ -55,24 +59,15 @@ def draw_transparent_path(screen, transparent_layer, paths, agent_colors):
         pygame.display.flip()
         clock.tick(5)
 
-"""
-# Constructing the multipath for multiagents
-agent_paths = [
-        [
-            state[0][agent_index]
-            for state in multi_path
-        ]
-        for agent_index in range(len(multi_path[0][0]))
-    ]
-    visualize(multi_world, agent_paths)
-"""
 
-def visualize(world, paths):
+def visualize(search_method, world, paths):
+    """This function visualizes the grid world and the paths of each agent using Pygame.
+    It initializes a Pygame window, draws the grid world, start and goal positions, and the paths of each agent."""
     rows = len(world.grid)
     cols = len(world.grid[0])
     
     pygame.init()
-    pygame.display.set_caption("Grid World")
+    pygame.display.set_caption("Grid World - Solved with " + search_method)
     screen = pygame.display.set_mode((cols * CELL_SIZE, rows * CELL_SIZE))
     transparent_layer = pygame.Surface((cols * CELL_SIZE, rows * CELL_SIZE), pygame.SRCALPHA)
     
