@@ -39,26 +39,45 @@ def draw_start_and_goal(screen, paths, agent_colors):
 
 
 def draw_transparent_path(screen, transparent_layer, paths, agent_colors):
-    """This function draws the paths of each agent from their start position to their goal position.
-    It draws these paths on a transparent layer over the grid world."""
+    """Draws the paths of each agent step by step."""
     clock = pygame.time.Clock()
     max_steps = max(len(path) for path in paths)
-        
+
     for step in range(max_steps):
+
+        # Keep the pygame window responsive during the animation
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+
         transparent_layer.fill((0, 0, 0, 0))
+
         for agent_index, path in enumerate(paths):
             red, green, blue = agent_colors[agent_index]
             transparent_path_color = (red, green, blue, 80)
+
             if step < len(path):
                 row, col = path[step]
+
                 if step > 0 and path[step] == path[step - 1]:
                     continue
-                pygame.draw.rect(transparent_layer, transparent_path_color, (col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE))
-        
+
+                pygame.draw.rect(
+                    transparent_layer,
+                    transparent_path_color,
+                    (
+                        col * CELL_SIZE,
+                        row * CELL_SIZE,
+                        CELL_SIZE,
+                        CELL_SIZE
+                    )
+                )
+
         screen.blit(transparent_layer, (0, 0))
         pygame.display.flip()
         clock.tick(5)
 
+    return True
 
 def visualize(search_method, world, paths):
     """This function visualizes the grid world and the paths of each agent using Pygame.
@@ -74,7 +93,16 @@ def visualize(search_method, world, paths):
     agent_colors = colors[:len(paths)]
     draw_grid(screen, world, rows, cols)
     draw_start_and_goal(screen, paths, agent_colors)
-    draw_transparent_path(screen, transparent_layer, paths, agent_colors)
+    animation_finished = draw_transparent_path(
+        screen,
+        transparent_layer,
+        paths,
+        agent_colors
+    )
+
+    if animation_finished is False:
+        pygame.quit()
+        return
 
     running = True
     while running:
