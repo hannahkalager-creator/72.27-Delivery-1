@@ -53,4 +53,3 @@ report_multi_agent("Greedy (Manhattan)", greedy(multi_world, manhattan_distance)
 report_multi_agent("A* (Manhattan)", astar(multi_world, manhattan_distance))
 report_multi_agent("A* (Euclidean)", astar(multi_world, euclidean_distance))
 report_multi_agent("A* (weighted Manhattan)", astar(multi_world, weighted_manhattan))
-
