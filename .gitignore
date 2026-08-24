@@ -1,4 +1,6 @@
 __pycache__/
-*.pyc*.png
+*.pyc
+.venv/
+*.png
 .DS_Store
 .vscode/
