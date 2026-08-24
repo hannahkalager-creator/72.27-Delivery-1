@@ -41,8 +41,8 @@ def bfs(world):
     expanded_nodes = 0
 
     # Start BFS from the initial position
-    queue.append(world.start)
-    visited.add(world.start)
+    queue.append(world.initial_state)
+    visited.add(world.initial_state)
 
     while queue:
         # BFS explores the first state in the queue
@@ -52,7 +52,7 @@ def bfs(world):
 
         # Return the solution path if the goal is reached
         if world.is_goal(current_state):
-            path= reconstruct_path(came_from, world.start, current_state)
+            path= reconstruct_path(came_from, world.initial_state, current_state)
             # Number of nodes still waiting in the frontier when the search ends
             frontier_nodes = len(queue)
 
@@ -90,15 +90,15 @@ def dfs(world):
     came_from = {}
     expanded_nodes = 0
 
-    stack.append(world.start)
-    visited.add(world.start)
+    stack.append(world.initial_state)
+    visited.add(world.initial_state)
 
     while stack:
         current_state= stack.pop()
         expanded_nodes += 1
 
         if world.is_goal(current_state):
-            path = reconstruct_path(came_from, world.start, current_state)
+            path = reconstruct_path(came_from, world.initial_state, current_state)
             frontier_nodes = len(stack)
 
             end_time = time.perf_counter()
@@ -125,8 +125,8 @@ def greedy(world, heuristic):
     came_from = {}
     expanded_nodes = 0
 
-    frontier.append(world.start)
-    visited.add(world.start)
+    frontier.append(world.initial_state)
+    visited.add(world.initial_state)
 
     while frontier:
     # Selects the state with the lowest heuristic value.
@@ -142,7 +142,7 @@ def greedy(world, heuristic):
 
         if world.is_goal(current_state):
             # Rebuild from the reached state; only it is a key in came_from
-            path = reconstruct_path(came_from, world.start, current_state)
+            path = reconstruct_path(came_from, world.initial_state, current_state)
             frontier_nodes = len(frontier)
 
             end_time = time.perf_counter()
@@ -169,9 +169,9 @@ def astar(world, heuristic):
     expanded_nodes = 0
     insertions = 0            # breaks f(n) ties by insertion order
 
-    g_cost = {world.start: 0}                          # g(n): actual cost from start
+    g_cost = {world.initial_state: 0}                          # g(n): actual cost from start
     # Fr: ordered by f(n); f(n) = g(n) + h(n)
-    frontier = [(world.heuristic_cost(world.start, heuristic), insertions, world.start)]
+    frontier = [(world.heuristic_cost(world.initial_state, heuristic), insertions, world.initial_state)]
 
     while frontier:
         f, _, current_state = heapq.heappop(frontier)
@@ -183,7 +183,7 @@ def astar(world, heuristic):
 
         if world.is_goal(current_state):
             # Rebuild from the reached state; only it is a key in came_from
-            path = reconstruct_path(came_from, world.start, current_state)
+            path = reconstruct_path(came_from, world.initial_state, current_state)
             end_time = time.perf_counter()
             return path, expanded_nodes, len(frontier), end_time - start_time
 

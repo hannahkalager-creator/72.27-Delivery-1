@@ -11,8 +11,7 @@ multi_start = (
     (
         (0, 0),  # Agent 0
         (4, 0)   # Agent 1
-    ),
-    0            # Agent 0 starts
+    )
 )
 
 multi_goal = (

@@ -14,18 +14,19 @@ class GridWorld():
         self.grid = grid
         self.start = start
         self.goal = goal
-        positions, _ = start
+        self.current_agent = 0
+        self.initial_state = (start, self.current_agent)
         
-        if len(positions) != len(goal):
+        if len(start) != len(goal):
             raise ValueError("Each agent must have one goal.")
 
-        if len(set(positions)) != len(positions):
+        if len(set(start)) != len(start):
             raise ValueError("Two agents cannot start in the same position.")
 
         if len(set(goal)) != len(goal):
             raise ValueError("Two agents cannot have the same goal.")
         
-        for position in positions:
+        for position in start:
             row, col = position
             if not self.is_valid_position(row, col):
                 raise ValueError("All start positions must be valid.")
@@ -36,7 +37,7 @@ class GridWorld():
                 raise ValueError("All goal positions must be valid.")
         
         free_cells = sum(cell == 0 for row in grid for cell in row)
-        if len(positions) > free_cells:
+        if len(start) > free_cells:
             raise ValueError("There are more agents than free cells.")
                     
     # Checks if all agents have reached their assigned goals
