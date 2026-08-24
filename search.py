@@ -148,7 +148,7 @@ def astar(world, heuristic):
 
         for neighbor in world.get_neighbors(current_state):
             if neighbor not in explored:
-                g_new = g_cost[current_state] + 1      # cost of each move is 1
+                g_new = g_cost[current_state] + 1
                 if neighbor not in g_cost or g_new < g_cost[neighbor]:
                     g_cost[neighbor] = g_new
                     f_new = g_new + world.heuristic_cost(neighbor, heuristic)
