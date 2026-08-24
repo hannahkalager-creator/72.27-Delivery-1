@@ -1,29 +1,77 @@
+# TP1 – Métodos de Búsqueda
 
-## Notes - while doing the TP1
+Implementation of search algorithms for the Multi-Agent Grid World problem.
 
-### Git Workflow
+## About the Project
 
-This project follows a structured branching strategy to keep the codebase clean and avoid conflicts.
+The project implements a turn-based Multi-Agent Grid World. Each agent has
+its own start and goal position, and only one agent moves at a time.
 
-**Branch structure:**
-```
-main
-└── develop
-      ├── feature/grid-world
-      ├── feature/bfs-dfs
-      ├── feature/astar-heuristics
-      └── feature/visualization
-```
+The objective is to find a solution where all agents reach their respective
+goals while comparing the performance of different search algorithms.
 
-- `main` — stable, final version. Only updated when the project is complete.
-- `develop` — active development branch. All features are merged here first.
-- `feature/*` — one branch per feature. This is where day-to-day coding happens.
+## Project Structure
 
-**When a feature is done:**
-Open a Pull Request on GitHub from your `feature/` branch into `develop`. The rest of the team reviews and approves before merging.
+- `main.py` – Runs the search algorithms and prints the results.
+- `grid_world.py` – Defines the Multi-Agent Grid World and the possible state transitions.
+- `boards.py` – Contains the board configurations, start positions and goal positions.
+- `search.py` – Contains BFS, DFS, Greedy and A*.
+- `heuristics.py` – Contains the heuristics used by the informed search methods.
+- `game_visual.py` – Visualizes the solution using pygame.
+- `tests/` – Contains tests for the Grid World and search algorithms.
 
-**General rules:**
-- Never commit directly to `main` or `develop`
-- Commit often with descriptive messages
-- Pull from `develop` regularly to stay up to date and avoid conflicts
+## Requirements
 
+- Python 3.12
+- pygame
+
+## Installation
+
+Create and activate a virtual environment:
+
+    python3.12 -m venv .venv
+    source .venv/bin/activate
+
+Install the required dependencies:
+
+    pip install pygame
+
+## Running the Program
+
+Run the search engine with:
+
+    python main.py
+
+The program reports:
+
+- Success/failure
+- Solution cost
+- Expanded nodes
+- Frontier nodes
+- Solution path
+- Processing time
+
+## Search Algorithms
+
+The following search algorithms are implemented:
+
+- BFS
+- DFS
+- Greedy
+- A*
+
+## Heuristics
+
+The informed search methods use:
+
+- Manhattan distance
+- Euclidean distance
+- Weighted Manhattan distance
+
+## Visualization
+
+[Add final instructions when the visualization is finished.]
+
+## Analysis
+
+[Add final instructions when the analysis is finished.]
