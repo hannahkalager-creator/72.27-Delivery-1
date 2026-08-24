@@ -1,6 +1,4 @@
 import pygame
-from grid_world import GridWorld
-import time
 
 CELL_SIZE = 80
 
@@ -55,17 +53,6 @@ def draw_transparent_path(screen, transparent_layer, paths, agent_colors):
         pygame.display.flip()
         clock.tick(5)
 
-"""
-# Constructing the multipath for multiagents
-agent_paths = [
-        [
-            state[0][agent_index]
-            for state in multi_path
-        ]
-        for agent_index in range(len(multi_path[0][0]))
-    ]
-    visualize(multi_world, agent_paths)
-"""
 
 def visualize(search_method, world, paths):
     rows = len(world.grid)

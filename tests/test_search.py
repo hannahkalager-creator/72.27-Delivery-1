@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from grid_world import GridWorld, MultiAgentGridWorld
+from grid_world import GridWorld, GridWorld
 from search import bfs, dfs, astar, greedy
 from heuristics import manhattan_distance, euclidean_distance, weighted_manhattan
 from boards import test_board, test_start, test_goal
@@ -166,7 +166,7 @@ class TestSearch(unittest.TestCase):
 # =============================================================================
 
     def multi_world(self):
-        return MultiAgentGridWorld(multi_board, multi_start, multi_goal)
+        return GridWorld(multi_board, multi_start, multi_goal)
 
     # heuristic_cost should add up each agent's own distance to its own goal.
     # Agent 0 goes (0,0)->(4,4) = 8 and agent 1 goes (4,0)->(0,4) = 8.
@@ -216,7 +216,7 @@ class TestSearch(unittest.TestCase):
     # Here agent 0 sits at (0,0) in a one-wide corridor, blocked by agent 1.
     def test_multi_no_solution_when_boxed_in(self):
         corridor = [[0, 0, 0, 0]]
-        world = MultiAgentGridWorld(
+        world = GridWorld(
             corridor,
             (((0, 0), (0, 1)), 0),
             ((0, 3), (0, 2))

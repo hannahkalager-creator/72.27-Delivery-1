@@ -1,4 +1,4 @@
-from grid_world import GridWorld, MultiAgentGridWorld
+from grid_world import GridWorld
 from boards import (
     multi_board,
     multi_start,
@@ -41,7 +41,7 @@ def report_multi_agent(search_method, result):
     
     visualize(search_method, multi_world, agent_paths)
 
-multi_world = MultiAgentGridWorld(
+multi_world = GridWorld(
     multi_board,
     multi_start,
     multi_goal
