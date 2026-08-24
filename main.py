@@ -1,65 +1,57 @@
 from grid_world import GridWorld
-from boards import test_board, test_goal, test_start
-from search import bfs, dfs, greedy #imports the search algorithms
-from heuristics import manhattan_distance
+from boards import (
+    multi_board,
+    multi_start,
+    multi_goal
+)
+from search import bfs, dfs, greedy, astar
+from heuristics import (
+    manhattan_distance,
+    euclidean_distance,
+    weighted_manhattan
+)
+from cost import calculate_agent_costs
+from game_visual import visualize
 
 
-# Create the Grid World
-world = GridWorld(test_board, test_start, test_goal)
+def report_multi_agent(search_method, result):
+    """This function generates a report for the multi-agent pathfinding results.
+    It takes the search method name and the result of the search algorithm as input."""
+    path, expanded_nodes, frontier_nodes, processing_time = result
 
-# Print basic information
-print("Start:", world.start)
-print("Goal:", world.goal)
+    print(f"\n{search_method}")
+    print("Solution:", path)
+    print("Expanded nodes:", expanded_nodes)
+    print("Frontier nodes:", frontier_nodes)
+    print("Processing time:", processing_time, "seconds")
 
-# Test which positions the agent can move to from the start
-neighbors = world.get_neighbors(world.start)
+    if not path:
+        print("No solution found.")
+        return
 
-print("Possible moves from start:", neighbors)
+    print("Turn cost:", len(path) - 1)
 
-#run BFS
-path, expanded_nodes, frontier_nodes, processing_time = bfs(world)
+    agent_costs = calculate_agent_costs(path)
 
-print("BFS solution:", path)
-print("Expanded nodes:", expanded_nodes)
-print("Frontier nodes:", frontier_nodes)
-print("Processing time:", processing_time, "seconds")
+    print("Movement cost per agent:")
+    for agent_index, cost in enumerate(agent_costs):
+        print(f"Agent {agent_index}: {cost}")
 
-#this is to find the cost
-if path:
-    cost = len(path) - 1
-    print("BFS cost:", cost)
-else:
-    print("No solution found.")
+    print("Total movement cost:", sum(agent_costs))
+    
+    agent_paths = [[state[0][agent_index] for state in path] for agent_index in range(len(path[0][0]))]
+    
+    visualize(search_method, multi_world, agent_paths)
 
-
-# Run DFS
-dfs_path, dfs_expanded, dfs_frontier, dfs_time = dfs(world)
-
-print("\nDFS")
-print("DFS solution:", dfs_path)
-print("Expanded nodes:", dfs_expanded)
-print("Frontier nodes:", dfs_frontier)
-print("Processing time:", dfs_time, "seconds")
-
-if dfs_path:
-    dfs_cost = len(dfs_path) - 1
-    print("DFS cost:", dfs_cost)
-else:
-    print("No solution found.")
-
-# Run Greedy Search using Manhattan distance
-greedy_path, greedy_expanded, greedy_frontier, greedy_time = greedy(
-    world, manhattan_distance
+multi_world = GridWorld(
+    multi_board,
+    multi_start,
+    multi_goal
 )
 
-print("\nGreedy")
-print("Greedy solution:", greedy_path)
-print("Expanded nodes:", greedy_expanded)
-print("Frontier nodes:", greedy_frontier)
-print("Processing time:", greedy_time, "seconds")
-
-if greedy_path:
-    greedy_cost = len(greedy_path) - 1
-    print("Greedy cost:", greedy_cost)
-else:
-    print("No solution found.")
+report_multi_agent("BFS", bfs(multi_world))
+report_multi_agent("DFS", dfs(multi_world))
+report_multi_agent("Greedy (Manhattan)", greedy(multi_world, manhattan_distance))
+report_multi_agent("A* (Manhattan)", astar(multi_world, manhattan_distance))
+report_multi_agent("A* (Euclidean)", astar(multi_world, euclidean_distance))
+report_multi_agent("A* (weighted Manhattan)", astar(multi_world, weighted_manhattan))
