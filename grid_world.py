@@ -92,23 +92,16 @@ class GridWorld():
         return neighbors
 
     def is_valid_position(self, row, col):
-            # Checks if a position is valid on the board
             rows = len(self.grid)
-            # Gets the number of rows in the grid
             cols = len(self.grid[0])
-            # Gets the number of columns in the grid
     
             if row < 0 or row >= rows:
                 return False
-            # Returns False if the row is outside the grid
     
             if col < 0 or col >= cols:
                 return False
-            # Returns False if the column is outside the grid
     
-            if self.grid[row][col] == 1:
+            if self.grid[row][col] == 1: # Returns False if the position is a wall/block
                 return False
-            # Returns False if the position is a wall/block
-    
-        # Otherwise, the agent can move to this position
+            
             return True
