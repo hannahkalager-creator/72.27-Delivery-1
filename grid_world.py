@@ -1,7 +1,3 @@
-# The GridWorld class represents the game board. 
-# grid contains the layout of the board, start is where the agent starts, 
-# and goal is where the agent is supposed to end up.
-
 directions = [
     (-1,0), #up
     (1,0), #down
@@ -10,6 +6,10 @@ directions = [
 ]
 
 class GridWorld():
+    """This class represents a multi-agent grid world environment. 
+    It contains the grid layout, start positions, and goal positions for each agent. 
+    The class provides methods to check if all agents have reached their goals, 
+    calculate heuristic costs, get neighboring states, and validate positions within the grid."""
     def __init__(self, grid, start, goal):
         self.grid = grid
         self.start = start
@@ -40,12 +40,13 @@ class GridWorld():
             raise ValueError("There are more agents than free cells.")
                     
     def all_agents_at_goal(self, state):
+        """This function checks if all agents have reached their respective goal positions in the grid world."""
         positions, _ = state
         return positions == self.goal
 
-    # Sums each agent's estimated distance to its own goal. A turn moves one agent one
-    # cell, so the sum drops by at most 1 per turn and never overestimates.
     def heuristic_cost(self, state, heuristic):
+        """This function calculates the heuristic cost for a given state in the grid world.
+        The heuristic cost is the sum of the estimated distances from each agent's current position to its goal position.""" 
         positions, _ = state
         return sum(
             heuristic(position, goal)
@@ -53,21 +54,17 @@ class GridWorld():
         )
 
     def get_neighbors(self, state):
+        """This function generates all valid neighboring states for a given state in the grid world.
+        It considers the current agent's position and checks all possible moves (up, down, left, right) to generate new states.
+        If the current agent has already reached its goal, it can stay in place and pass the turn to the next agent. 
+        The function returns a list of valid neighboring states."""
         positions, current_agent = state
         neighbors = []
-
         row, col = positions[current_agent]
 
-        # If the current agent has already reached its goal,
-        # it can stay in place and pass the turn to the next agent.
         if positions[current_agent] == self.goal[current_agent]:
             next_agent = (current_agent + 1) % len(positions)
-
-            wait_state = (
-                positions,
-                next_agent
-            )
-
+            wait_state = (positions, next_agent)
             neighbors.append(wait_state)
         else:
             for row_change, col_change in directions:
@@ -79,29 +76,25 @@ class GridWorld():
                     if new_position not in positions:
                         new_positions = list(positions)
                         new_positions[current_agent] = new_position
-
                         next_agent = (current_agent + 1) % len(positions)
-
-                        new_state = (
-                            tuple(new_positions),
-                            next_agent
-                        )
-
+                        new_state = (tuple(new_positions), next_agent)
                         neighbors.append(new_state)
 
         return neighbors
 
     def is_valid_position(self, row, col):
-            rows = len(self.grid)
-            cols = len(self.grid[0])
-    
-            if row < 0 or row >= rows:
-                return False
-    
-            if col < 0 or col >= cols:
-                return False
-    
-            if self.grid[row][col] == 1: # Returns False if the position is a wall/block
-                return False
-            
-            return True
+        """This function checks if a given position (row, col) is valid within the grid world.
+        A position is considered valid if it is within the bounds of the grid and is not a wall/block (represented by 1 in the grid)."""
+        rows = len(self.grid)
+        cols = len(self.grid[0])
+
+        if row < 0 or row >= rows:
+            return False
+
+        if col < 0 or col >= cols:
+            return False
+
+        if self.grid[row][col] == 1:
+            return False
+        
+        return True

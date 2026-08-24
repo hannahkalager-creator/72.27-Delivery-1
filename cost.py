@@ -1,4 +1,7 @@
 def calculate_agent_costs(path):
+    """This function calculates the movement cost for each agent based on the provided path.
+    The movement cost is defined as the number of moves each agent makes from the start state to the goal state. 
+    The function returns a list of movement costs for each agent."""
     if not path:
         return []
 

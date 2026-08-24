@@ -15,6 +15,8 @@ from game_visual import visualize
 
 
 def report_multi_agent(search_method, result):
+    """This function generates a report for the multi-agent pathfinding results.
+    It takes the search method name and the result of the search algorithm as input."""
     path, expanded_nodes, frontier_nodes, processing_time = result
 
     print(f"\n{search_method}")
