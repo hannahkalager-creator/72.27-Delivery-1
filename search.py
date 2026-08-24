@@ -28,67 +28,46 @@ def reconstruct_path(came_from, start, goal):
 
 def bfs(world):
     start_time = time.perf_counter()
-    # States that have already been visited
-    visited = set()
-
-    # States waiting to be explored
-    queue = deque()
-
-    #to remember previous places
-    came_from = {}
-
-    #counts how many nodes BFS expands
     expanded_nodes = 0
-
-    # Start BFS from the initial position
+    
+    visited = set()
+    queue = deque() # States waiting to be explored
+    came_from = {}
+    
     queue.append(world.state)
     visited.add(world.state)
 
     while queue:
-        # BFS explores the first state in the queue
         current_state = queue.popleft()
         expanded_nodes += 1
 
-
-        # Return the solution path if the goal is reached
         if world.all_agents_at_goal(current_state):
             path= reconstruct_path(came_from, world.state, current_state)
-            # Number of nodes still waiting in the frontier when the search ends
             frontier_nodes = len(queue)
-
 
             end_time = time.perf_counter()
             processing_time = end_time - start_time
 
-
             return path, expanded_nodes, frontier_nodes, processing_time
 
-
-        # Explore all valid neighboring states
         for neighbor in world.get_neighbors(current_state):
             if neighbor not in visited:
                 visited.add(neighbor)
                 queue.append(neighbor)
-                # Remember where this state came from
                 came_from[neighbor] = current_state
-
 
     end_time = time.perf_counter()
     processing_time = end_time-start_time
 
-    # No solution was found
     return None, expanded_nodes, len(queue), processing_time
 
 def dfs(world):
     start_time = time.perf_counter()
+    expanded_nodes = 0
 
     visited = set()
-
-    # A list, not a deque: DFS pops from the end, which is already O(1)
-    stack = []
-
+    stack = [] # A list, not a deque: DFS pops from the end, which is already O(1)
     came_from = {}
-    expanded_nodes = 0
 
     stack.append(world.state)
     visited.add(world.state)
@@ -119,11 +98,11 @@ def dfs(world):
 
 def greedy(world, heuristic):
     start_time = time.perf_counter()
+    expanded_nodes = 0
 
     visited = set()
     frontier = []
     came_from = {}
-    expanded_nodes = 0
 
     frontier.append(world.state)
     visited.add(world.state)
@@ -161,12 +140,13 @@ def greedy(world, heuristic):
 
     return None, expanded_nodes, len(frontier), processing_time
 
+
 def astar(world, heuristic):
     start_time = time.perf_counter()
+    expanded_nodes = 0
 
     explored = set()          # Exp: states already expanded
     came_from = {}            # search tree: tracks where each state came from
-    expanded_nodes = 0
     insertions = 0            # breaks f(n) ties by insertion order
 
     g_cost = {world.state: 0}                          # g(n): actual cost from start
