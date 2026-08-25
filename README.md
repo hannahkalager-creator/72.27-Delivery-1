@@ -54,19 +54,12 @@ pip install pygame numpy matplotlib notebook
 Run the program with:
 
 ```bash
-python main.py
+python main.py --difficulty moderate --agents 4
 ```
+- The first parameter '--difficulty' takes 'simple', 'moderate' or 'hard' and determines the size of the board.
+- The second parameter '--agents' takes in the number of agents from 1-4.
 
-The program runs the different search algorithms and reports:
-
-- Solution path
-- Turn cost
-- Movement cost per agent
-- Total movement cost
-- Expanded nodes
-- Frontier nodes
-- Processing time
-- Success/failure
+The program runs the different search algorithms and visualize the paths for each search algorithm:
 
 The solution path for each algorithm is also visualized using pygame.
 
@@ -132,10 +125,10 @@ The reported costs are:
 The solution paths are visualized using pygame when running:
 
 ```bash
-python main.py
+python main.py --difficulty simple --agents 2
 ```
 
-The program uses the multi-agent configuration defined by `multi_board`, `multi_start` and `multi_goal` in `boards.py`.
+The program uses the multi-agent configuration defined by in `boards.py`.
 
 Each agent is represented by a different color. The visualization shows the grid and the path followed by each agent from its start position to its goal.
 
