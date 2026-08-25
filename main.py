@@ -1,8 +1,7 @@
 from grid_world import GridWorld
 from boards import (
-    multi_board,
-    multi_start,
-    multi_goal
+    simple_multi_board,
+    simple_multi_configs
 )
 from search import bfs, dfs, greedy, astar
 from heuristics import (
@@ -43,10 +42,12 @@ def report_multi_agent(search_method, result):
     
     visualize(search_method, multi_world, agent_paths)
 
+
+config = simple_multi_configs[2]
 multi_world = GridWorld(
-    multi_board,
-    multi_start,
-    multi_goal
+    simple_multi_board,
+    config["start"],
+    config["goal"]
 )
 
 report_multi_agent("BFS", bfs(multi_world))
