@@ -24,7 +24,7 @@ The implementation supports a variable number of agents. Different configuration
 - `cost.py` – Calculates the movement cost for each agent.
 - `game_visual.py` – Visualizes the solution paths using pygame.
 - `analysis.ipynb` – Compares the performance of the different search algorithms.
-- `tests/` – Contains tests for the search algorithms and multi-agent behavior.
+
 
 ## Requirements
 
@@ -172,21 +172,3 @@ The analysis compares:
 - A* with Euclidean distance
 
 A timeout is used for searches that take too long to complete.
-## Running the Tests
-
-The project includes tests for the search algorithms, heuristics and multi-agent behavior.
-
-Run the tests with:
-
-```bash
-python -m unittest discover tests
-```
-
-The tests check examples such as:
-
-- Multi-agent heuristic calculation
-- A* solution cost compared with BFS
-- Admissibility of Manhattan and Euclidean heuristics
-- Greedy finding a valid solution
-- Weighted Manhattan expansion behavior
-- A multi-agent case where no solution exists
